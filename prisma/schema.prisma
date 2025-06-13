@@ -11,11 +11,11 @@ model Task {
   id          Int      @id @default(autoincrement())
   title       String
   description String?
-  status      Status    @default(PENDING)
+  status      Status    @default(pending)
 }
 
 enum Status {
-  PENDING
-  IN_PROGRESS
-  DONE
+  pending
+  in_progress 
+  done
 }
