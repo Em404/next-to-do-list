@@ -33,6 +33,15 @@ import { api } from "@/trpc/react";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrash, faPlus } from "@fortawesome/free-solid-svg-icons";
+import {
+  Card,
+  CardAction,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "./card";
 
 function Task() {
   const router = useRouter();
@@ -151,90 +160,44 @@ function Task() {
       : tasks.filter((task) => task.status === selectedStatus);
 
   return (
-    <div>
-      <h1 className="text-2xl font-bold mb-4">Task List</h1>
+    <div className="flex flex-col min-h-screen">
+      <h1 className="text-2xl font-bold py-4 sticky top-0 bg-white z-10">
+        Task List
+      </h1>
 
-      {/* Form creazione nuovo task */}
-      <div className="space-y-6 mb-8">
-        <div className="space-y-2">
-          <Label htmlFor="title">Title</Label>
-          <Input
-            id="title"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            placeholder="Enter task title"
-          />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="description">Description</Label>
-          <Input
-            id="description"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            placeholder="Optional description"
-          />
-        </div>
-        <Button
-          className="hover:cursor-pointer"
-          onClick={handleCreate}
-          disabled={createTask.isPending}
-        >
-          Add Task
-          <FontAwesomeIcon icon={faPlus} />
-        </Button>
-      </div>
-
-      {/* Tabs filtro */}
       <div>
-        <Tabs value={selectedStatus} onValueChange={onChangeStatus}>
-          <TabsList
-            className={` mb-4 w-full
-                  ${selectedStatus === "pending" ? "bg-yellow-100" : ""}
-                  ${selectedStatus === "in_progress" ? "bg-blue-100" : ""}
-                  ${selectedStatus === "done" ? "bg-green-100" : ""}
-                `}
-          >
-            <TabsTrigger value="all">All</TabsTrigger>
-            <TabsTrigger value="pending">Pending</TabsTrigger>
-            <TabsTrigger value="in_progress">In Progress</TabsTrigger>
-            <TabsTrigger value="done">Done</TabsTrigger>
-          </TabsList>
-        </Tabs>
-      </div>
-
-      {/* Tabella task */}
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Title</TableHead>
-            <TableHead>Description</TableHead>
-            <TableHead>Status</TableHead>
-            <TableHead>Actions</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
+        {/* cards for tasks */}
+        <div className="grid gap-4 overflow-y-auto">
           {isLoading ? (
-            <TableRow>
-              <TableCell colSpan={4}>Loading...</TableCell>
-            </TableRow>
+            <div className="col-span-full text-center">Loading...</div>
           ) : filteredTasks.length === 0 ? (
-            <TableRow>
-              <TableCell colSpan={4}>No tasks</TableCell>
-            </TableRow>
+            <div className="col-span-full text-center">No tasks</div>
           ) : (
             filteredTasks.map((task) => (
-              <TableRow
+              <Card
                 key={task.id}
-                className={` 
-                  ${task.status === "pending" ? "bg-yellow-100 hover:bg-yellow-300" : ""}
-                  ${task.status === "in_progress" ? "bg-blue-100 hover:bg-blue-300" : ""}
-                  ${task.status === "done" ? "bg-green-100 hover:bg-green-300" : ""}
-                 
-                `}
+                className={`
+          transition-colors
+          ${
+            task.status === "pending"
+              ? "bg-yellow-100 hover:bg-yellow-200"
+              : task.status === "in_progress"
+              ? "bg-blue-100 hover:bg-blue-200"
+              : "bg-green-100 hover:bg-green-200"
+          }
+        `}
               >
-                <TableCell>{task.title}</TableCell>
-                <TableCell>{task.description || "-"}</TableCell>
-                <TableCell>
+                <CardHeader>
+                  <CardTitle className="text-lg">{task.title}</CardTitle>
+                </CardHeader>
+
+                <CardContent>
+                  <p className="text-sm text-gray-700 mb-4">
+                    {task.description || ""}
+                  </p>
+                </CardContent>
+
+                <CardFooter className="flex justify-end gap-2">
                   <Select
                     value={task.status}
                     onValueChange={(status) =>
@@ -246,7 +209,7 @@ function Task() {
                       })
                     }
                   >
-                    <SelectTrigger className="w-[140px]">
+                    <SelectTrigger className="w-full hover:cursor-pointer">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
@@ -255,29 +218,85 @@ function Task() {
                       <SelectItem value="done">Done</SelectItem>
                     </SelectContent>
                   </Select>
-                </TableCell>
-                <TableCell className="space-x-2">
                   <Button
-                    size="sm"
                     className="hover:cursor-pointer"
+                    size="sm"
                     onClick={() => handleEdit(task)}
                   >
                     <FontAwesomeIcon icon={faEdit} />
                   </Button>
                   <Button
-                    size="sm"
                     className="hover:cursor-pointer"
+                    size="sm"
                     variant="destructive"
                     onClick={() => handleDelete(String(task.id))}
                   >
                     <FontAwesomeIcon icon={faTrash} />
                   </Button>
-                </TableCell>
-              </TableRow>
+                </CardFooter>
+              </Card>
             ))
           )}
-        </TableBody>
-      </Table>
+        </div>
+      </div>
+
+      <div className="sticky bottom-0 bg-white pt-4 ">
+        {/* Form new task */}
+        <div className="space-y-6 mb-8 order-2">
+          <div className="space-y-2">
+            <Label htmlFor="title">Title</Label>
+            <Input
+              id="title"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              placeholder="Enter task title"
+            />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="description">Description</Label>
+            <Input
+              id="description"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              placeholder="Optional description"
+            />
+          </div>
+          <div className="flex justify-center md:justify-end">
+            <Button
+              className="hover:cursor-pointer w-full md:w-auto"
+              onClick={handleCreate}
+              disabled={createTask.isPending}
+            >
+              Add Task
+              <FontAwesomeIcon icon={faPlus} />
+            </Button>
+          </div>
+        </div>
+
+        {/* Tabs */}
+        <Tabs value={selectedStatus} onValueChange={onChangeStatus}>
+          <TabsList
+            className={`w-full
+                  ${selectedStatus === "pending" ? "bg-yellow-100" : ""}
+                  ${selectedStatus === "in_progress" ? "bg-blue-100" : ""}
+                  ${selectedStatus === "done" ? "bg-green-100" : ""}
+                `}
+          >
+            <TabsTrigger className="hover:cursor-pointer" value="all">
+              All
+            </TabsTrigger>
+            <TabsTrigger className="hover:cursor-pointer" value="pending">
+              Pending
+            </TabsTrigger>
+            <TabsTrigger className="hover:cursor-pointer" value="in_progress">
+              In Progress
+            </TabsTrigger>
+            <TabsTrigger className="hover:cursor-pointer" value="done">
+              Done
+            </TabsTrigger>
+          </TabsList>
+        </Tabs>
+      </div>
 
       {/* Dialog modifica */}
       <Dialog open={editDialogOpen} onOpenChange={setEditDialogOpen}>

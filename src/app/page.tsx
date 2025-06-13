@@ -7,7 +7,7 @@ export default async function Home() {
 
   return (
     <HydrateClient>
-      <div className="mx-auto max-w-4xl py-4 px-4">
+      <div className="mx-auto max-w-4xl h-screen">
         {/* <Navbar /> */}
         <Task />
       </div>
