@@ -246,8 +246,8 @@ function ToDoList() {
                   <SelectContent className="rounded-2xl ">
                     {taskStatus
                       .filter((task) => task.value !== "all")
-                      .map((task) => (
-                        <SelectItem value={task.value} className="rounded-2xl">
+                      .map((task, index) => (
+                        <SelectItem key={index} value={task.value} className="rounded-2xl">
                           {task.label}
                         </SelectItem>
                       ))}
