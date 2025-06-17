@@ -11,6 +11,7 @@ import superjson from "superjson";
 import { ZodError } from "zod";
 
 import { db  } from "../db";
+import { getAuth } from "@clerk/nextjs/server";
 
 /**
  * 1. CONTEXT
@@ -25,8 +26,11 @@ import { db  } from "../db";
  * @see https://trpc.io/docs/server/context
  */
 export const createTRPCContext = async (opts: { headers: Headers }) => {
+  const auth = getAuth({ headers: opts.headers }); 
+  const userId = auth.userId;
   return {
     db,
+    userId,
     ...opts,
   };
 };
@@ -96,6 +100,17 @@ const timingMiddleware = t.middleware(async ({ next, path }) => {
   return result;
 });
 
+const isAuthed = t.middleware(async ({ ctx, next }) => {
+  if (!ctx.userId) {
+    throw new Error("Not authenticated");
+  }
+  return next({
+    ctx: {
+      userId: ctx.userId,
+    },
+  });
+});
+
 /**
  * Public (unauthenticated) procedure
  *
@@ -104,3 +119,4 @@ const timingMiddleware = t.middleware(async ({ next, path }) => {
  * are logged in.
  */
 export const publicProcedure = t.procedure.use(timingMiddleware);
+export const protectedProcedure = t.procedure.use(isAuthed).use(timingMiddleware);

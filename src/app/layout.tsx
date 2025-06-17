@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { TRPCReactProvider } from "@/trpc/react";
+import { ClerkProvider } from "@clerk/nextjs";
+import Navbar from "@/components/Navbar";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -24,10 +26,21 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body>
-        <TRPCReactProvider>{children}</TRPCReactProvider>
-      </body>
-    </html>
+    <ClerkProvider>
+      <html lang="en">
+        <body>
+          <div className="min-h-screen bg-neutral-50">
+            <div className="py-4 px-4 md:px-16 sticky top-0 bg-purple-500 text-white z-10">
+              <Navbar />
+            </div>
+            <div className="container mx-auto max-w-4xl px-4 md:px-16">
+              <TRPCReactProvider>
+                {children}
+              </TRPCReactProvider>
+            </div>
+          </div>
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }

@@ -12,6 +12,9 @@ model Task {
   title       String
   description String?
   status      Status    @default(pending)
+  userId      String
+
+  @@index([userId])
 }
 
 enum Status {

@@ -1,16 +1,23 @@
-import Navbar from "@/components/ui/navbar";
-import Task from "@/components/ui/task";
-import { HydrateClient, api } from "@/trpc/server";
+"use client";
 
-export default async function Home() {
-  void api.task.getAll.prefetch();
+import { useEffect } from "react";
+import { useUser } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
+
+export default function Home() {
+  const { isSignedIn, isLoaded } = useUser();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (isLoaded && isSignedIn) {
+      router.push("/to-do-list");
+    }
+  }, [isSignedIn]);
 
   return (
-    <HydrateClient>
-      <div className="mx-auto max-w-4xl h-screen">
-        {/* <Navbar /> */}
-        <Task />
-      </div>
-    </HydrateClient>
+    <div className="flex flex-col items-center justify-center">
+      <h1>Welcome to your Next To Do List app!</h1>
+      <p>Sign up to start using your new app.</p>
+    </div>
   );
 }
