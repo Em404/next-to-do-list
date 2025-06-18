@@ -6,22 +6,25 @@ import Link from "next/link";
 
 function Navbar() {
   return (
-    <div className="flex justify-between items-center container mx-auto max-w-4xl">
+    <div className="flex justify-between items-center container mx-auto max-w-5xl">
       <Link href={"/"}>
         <h1 className="font-semibold">Next To Do List</h1>
       </Link>
       <div>
         <SignedOut>
-          <SignInButton><span className="hover:cursor-pointer">Sing in</span></SignInButton>
+          <SignInButton>
+            <span className="hover:cursor-pointer">Sing in</span>
+          </SignInButton>
         </SignedOut>
         <SignedIn>
-          <UserButton 
+          <UserButton
             showName
             appearance={{
               elements: {
                 userButtonBox: "text-white hover:cursor-pointer",
-              }
-            }} />
+              },
+            }}
+          />
         </SignedIn>
       </div>
     </div>

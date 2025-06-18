@@ -3,6 +3,7 @@ import "./globals.css";
 import { TRPCReactProvider } from "@/trpc/react";
 import { ClerkProvider } from "@clerk/nextjs";
 import Navbar from "@/components/Navbar";
+import { dark } from "@clerk/themes";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -15,17 +16,19 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider>
+    <ClerkProvider
+      appearance={{
+        baseTheme: dark,
+      }}
+    >
       <html lang="en">
         <body>
-          <div className="min-h-screen bg-neutral-50">
-            <div className="py-4 px-4 md:px-16 sticky top-0 bg-purple-500 text-white z-10">
+          <div className="min-h-screen bg-neutral-950 text-neutral-50">
+            <div className="py-4 px-4 md:px-16 sticky top-0 bg-purple-800 z-10">
               <Navbar />
             </div>
-            <div className="container mx-auto max-w-4xl px-4 md:px-16">
-              <TRPCReactProvider>
-                {children}
-              </TRPCReactProvider>
+            <div className="container mx-auto px-4 md:px-16">
+              <TRPCReactProvider>{children}</TRPCReactProvider>
             </div>
           </div>
         </body>

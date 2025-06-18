@@ -47,7 +47,7 @@ export default function TaskDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent>
+      <DialogContent className="bg-neutral-900 text-neutral-50 border-neutral-800 selection:bg-neutral-50">
         <DialogHeader>
           <DialogTitle>{dialogTitle}</DialogTitle>
         </DialogHeader>
@@ -56,22 +56,22 @@ export default function TaskDialog({
           <div className="space-y-6 mb-8">
             <div className="space-y-2">
               <Label htmlFor="title">Title</Label>
-              <Input
+              <textarea
                 id="title"
                 value={title}
                 onChange={(e) => onTitleChange?.(e.target.value)}
                 placeholder="Enter task title"
-                className="rounded-2xl"
+                className="rounded-2xl selection:bg-neutral-50 selection:text-neutral-950 break-words w-full p-2 border-2 border-neutral-800"
               />
             </div>
             <div className="space-y-2">
               <Label htmlFor="description">Description</Label>
-              <Input
+              <textarea
                 id="description"
                 value={description}
                 onChange={(e) => onDescriptionChange?.(e.target.value)}
                 placeholder="Optional description"
-                className="rounded-2xl"
+                className="rounded-2xl selection:bg-neutral-50 selection:text-neutral-950 break-words w-full p-2 border-2 border-neutral-800"
               />
             </div>
           </div>
@@ -87,7 +87,7 @@ export default function TaskDialog({
         <DialogFooter>
           <Button
             variant="outline"
-            className="hover:cursor-pointer rounded-2xl"
+            className="hover:cursor-pointer bg-transparent hover:bg-neutral-700 hover:text-neutral-50 rounded-2xl"
             onClick={onCancel}
           >
             Cancel
@@ -98,7 +98,7 @@ export default function TaskDialog({
             className={`hover:cursor-pointer rounded-2xl ${
               isDelete
                 ? "bg-red-500 hover:bg-red-400 text-white"
-                : "bg-purple-500 hover:bg-purple-400 text-white w-full md:w-auto"
+                : "bg-purple-800 hover:bg-purple-600 text-white w-full md:w-auto"
             }`}
           >
             {isAdd && (
