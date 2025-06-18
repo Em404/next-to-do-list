@@ -169,9 +169,9 @@ function ToDoList() {
 
   return (
     <div className="flex flex-col">
-      <div className="flex flex-col md:flex-row items-center justify-between gap-4 py-4 px-4 md:px-0 md:py-8 fixed bottom-0 md:sticky md:top-[3.75rem] z-10 self-center w-full bg-neutral-950 max-w-5xl">
+      <div className="flex flex-col md:flex-row items-center justify-between gap-4 py-8 px-4 md:px-0 md:py-8 fixed bottom-0 md:sticky md:top-[3.75rem] z-10 self-center w-full bg-neutral-950 max-w-5xl">
         <div className="w-full order-2 md:order-1">
-          <Tabs value={selectedStatus} onValueChange={onChangeStatus} className="md:h-12">
+          <Tabs value={selectedStatus} onValueChange={onChangeStatus} className="h-12">
             <TabsList className="w-full h-full bg-neutral-800 rounded-2xl flex">
               {taskStatus.map((task) => (
                 <TabsTrigger
@@ -194,14 +194,14 @@ function ToDoList() {
         </Button>
       </div>
 
-      <div className="columns-1 md:columns-2 lg:columns-3 xl:columns-4 gap-4 order-1 md:order-2 mt-8 md:mt-0 md:mb-8">
+      <div className="columns-1 md:columns-2 lg:columns-3 xl:columns-4 gap-4 order-1 md:order-2 mt-8 md:mt-0 md:mb-8 mb-28">
         {isLoading ? (
           <div className="col-span-full text-center">Loading...</div>
         ) : filteredTasks.length === 0 ? (
           <div className="col-span-full text-center">No tasks :(</div>
         ) : (
           filteredTasks.map((task) => (
-            <div className="break-inside-avoid mb-4">
+            <div className="break-inside-avoid mb-4" key={task.id}>
               <Card
                 key={task.id}
                 className="gap-y-2 py-4 rounded-2xl bg-neutral-900 border-2 border-neutral-800 text-neutral-50 w-full"
@@ -230,10 +230,10 @@ function ToDoList() {
                       className={`w-full hover:cursor-pointer rounded-2xl border-neutral-800          
                       ${
                         task.status === "pending"
-                          ? "bg-amber-400 text-neutral-50 font-semibold hover:bg-amber-300"
+                          ? "bg-yellow-600 text-neutral-50 font-semibold hover:bg-yellow-500"
                           : task.status === "in_progress"
-                          ? "bg-sky-400 text-neutral-50 font-semibold hover:bg-sky-300"
-                          : "bg-green-400 text-neutral-50 font-semibold hover:bg-green-300"
+                          ? "bg-sky-600 text-neutral-50 font-semibold hover:bg-sky-500"
+                          : "bg-green-700 text-neutral-50 font-semibold hover:bg-green-600"
                       }`}
                     >
                       <SelectValue />

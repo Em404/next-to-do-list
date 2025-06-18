@@ -34,15 +34,15 @@ export default function Home() {
 
   const taskStatus = [
     {
-      color: "amber-400",
+      color: "yellow-600",
       label: "Pending",
     },
     {
-      color: "sky-400",
+      color: "sky-600",
       label: "In progess",
     },
     {
-      color: "green-400",
+      color: "green-700",
       label: "Done",
     },
   ];
@@ -55,7 +55,7 @@ export default function Home() {
       <p className="font-semibold text-xl text-center">
         <SignedOut>
           <SignInButton>
-            <span className="hover:cursor-pointer text-purple-800 hover:text-purple-400 font-semibold duration-300">
+            <span className="hover:cursor-pointer text-purple-800 hover:text-purple-600 font-semibold duration-300">
               Sing in{" "}
             </span>
           </SignInButton>
