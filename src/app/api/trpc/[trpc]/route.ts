@@ -12,7 +12,7 @@ import { appRouter } from "@/server/api/root";
  */
 const createContext = async (req: NextRequest) => {
   return createTRPCContext({
-    headers: req.headers,
+    req,
   });
 };
 

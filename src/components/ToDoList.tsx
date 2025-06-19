@@ -17,8 +17,6 @@ import {
   Card,
   CardContent,
   CardFooter,
-  CardHeader,
-  CardTitle,
 } from "@/components/ui/card";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -81,7 +79,6 @@ function ToDoList() {
     },
   });
 
-  // Sincronizza stato con query param se cambia esternamente
   useEffect(() => {
     if (statusFromQuery && statusFromQuery !== selectedStatus) {
       setSelectedStatus(statusFromQuery);
@@ -170,8 +167,8 @@ function ToDoList() {
 
   return (
     <div className="flex flex-col">
-      <div className="flex flex-col md:flex-row items-center justify-between gap-4 py-8 px-4 md:px-0 md:py-8 fixed bottom-0 md:sticky md:top-[3.75rem] z-10 self-center w-full bg-neutral-950 max-w-5xl">
-        <div className="w-full order-2 md:order-1">
+      <div className="flex flex-col md:flex-row items-center justify-between gap-4 py-8 px-4 md:px-0 lg:px-12 xl:px-32 fixed bottom-0 md:sticky md:top-[3.75rem] z-10 self-center w-full bg-neutral-950">
+        <div className="w-full order-2 md:order-1 bg-neutral-950">
           <Tabs
             value={selectedStatus}
             onValueChange={onChangeStatus}
