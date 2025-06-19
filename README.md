@@ -11,9 +11,13 @@ npm install
 Create the .env file in the root folder in which to declare the following environment variables:
 
 DATABASE_URL=""
+
 NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=""
+
 CLERK_SECRET_KEY=""
+
 NEXT_PUBLIC_CLERK_SIGN_IN_URL=""
+
 NEXT_PUBLIC_CLERK_SIGN_UP_URL=""
 
 For more info you can follow the following docs:
