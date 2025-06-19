@@ -25,6 +25,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrash, faPlus } from "@fortawesome/free-solid-svg-icons";
 
 import TaskDialog from "./TaskDialog";
+import Spinner from "./Spinner";
 
 function ToDoList() {
   const router = useRouter();
@@ -171,7 +172,11 @@ function ToDoList() {
     <div className="flex flex-col">
       <div className="flex flex-col md:flex-row items-center justify-between gap-4 py-8 px-4 md:px-0 md:py-8 fixed bottom-0 md:sticky md:top-[3.75rem] z-10 self-center w-full bg-neutral-950 max-w-5xl">
         <div className="w-full order-2 md:order-1">
-          <Tabs value={selectedStatus} onValueChange={onChangeStatus} className="h-12">
+          <Tabs
+            value={selectedStatus}
+            onValueChange={onChangeStatus}
+            className="h-12"
+          >
             <TabsList className="w-full h-full bg-neutral-800 rounded-2xl flex">
               {taskStatus.map((task) => (
                 <TabsTrigger
@@ -194,82 +199,84 @@ function ToDoList() {
         </Button>
       </div>
 
-      <div className="columns-1 md:columns-2 lg:columns-3 xl:columns-4 gap-4 order-1 md:order-2 mt-8 md:mt-0 md:mb-8 mb-28">
+      <div className="gap-4 order-1 md:order-2">
         {isLoading ? (
-          <div className="col-span-full text-center">Loading...</div>
+          <Spinner />
         ) : filteredTasks.length === 0 ? (
-          <div className="col-span-full text-center">No tasks :(</div>
+          <div className="flex flex-col gap-y-4 justify-center items-center text-center h-[80vh]">
+            <p className="font-semibold text-3xl">No Tasks :(</p>
+            <p className="text-xl">Start adding your first task!</p>
+          </div>
         ) : (
-          filteredTasks.map((task) => (
-            <div className="break-inside-avoid mb-4" key={task.id}>
-              <Card
-                key={task.id}
-                className="gap-y-2 py-4 rounded-2xl bg-neutral-900 border-2 border-neutral-800 text-neutral-50 w-full"
-              >
-                <CardContent>
-                  <p className="text-lg font-semibold break-words">
-                    {task.title}
-                  </p>
-                </CardContent>
-                <CardContent>
-                  <p className="break-words">{task.description || ""}</p>
-                </CardContent>
-                <CardFooter className="flex justify-end gap-2 mt-2">
-                  <Select
-                    value={task.status}
-                    onValueChange={(status) =>
-                      updateTask.mutate({
-                        id: String(task.id),
-                        title: task.title,
-                        description: task.description ?? "",
-                        status: status as "pending" | "in_progress" | "done",
-                      })
-                    }
-                  >
-                    <SelectTrigger
-                      className={`w-full hover:cursor-pointer rounded-2xl border-neutral-800          
-                      ${
-                        task.status === "pending"
-                          ? "bg-yellow-600 text-neutral-50 font-semibold hover:bg-yellow-500"
-                          : task.status === "in_progress"
-                          ? "bg-sky-600 text-neutral-50 font-semibold hover:bg-sky-500"
-                          : "bg-green-700 text-neutral-50 font-semibold hover:bg-green-600"
-                      }`}
+          <div className="columns-1 md:columns-2 lg:columns-3 xl:columns-4 mt-8 md:mt-0 md:mb-8 mb-40">
+            {filteredTasks.map((task) => (
+              <div className="break-inside-avoid mb-4" key={task.id}>
+                <Card className="gap-y-2 py-4 rounded-2xl bg-neutral-900 border-2 border-neutral-800 text-neutral-50 w-full">
+                  <CardContent>
+                    <p className="text-lg font-semibold break-words">
+                      {task.title}
+                    </p>
+                  </CardContent>
+                  <CardContent>
+                    <p className="break-words">{task.description || ""}</p>
+                  </CardContent>
+                  <CardFooter className="flex justify-end gap-2 mt-2">
+                    <Select
+                      value={task.status}
+                      onValueChange={(status) =>
+                        updateTask.mutate({
+                          id: String(task.id),
+                          title: task.title,
+                          description: task.description ?? "",
+                          status: status as "pending" | "in_progress" | "done",
+                        })
+                      }
                     >
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent className="rounded-2xl bg-neutral-800 text-neutral-50 border-neutral-800">
-                      {taskStatus
-                        .filter((task) => task.value !== "all")
-                        .map((task, index) => (
-                          <SelectItem
-                            key={index}
-                            value={task.value}
-                            className="rounded-2xl hover:cursor-pointer"
-                          >
-                            {task.label}
-                          </SelectItem>
-                        ))}
-                    </SelectContent>
-                  </Select>
-                  <Button
-                    className="hover:cursor-pointer bg-purple-800 hover:bg-purple-600 rounded-2xl"
-                    size="sm"
-                    onClick={() => handleEdit(task)}
-                  >
-                    <FontAwesomeIcon icon={faEdit} />
-                  </Button>
-                  <Button
-                    className="hover:cursor-pointer bg-purple-800 hover:bg-purple-600 rounded-2xl"
-                    size="sm"
-                    onClick={() => handleDelete(String(task.id))}
-                  >
-                    <FontAwesomeIcon icon={faTrash} />
-                  </Button>
-                </CardFooter>
-              </Card>
-            </div>
-          ))
+                      <SelectTrigger
+                        className={`w-full hover:cursor-pointer rounded-2xl border-neutral-800          
+                  ${
+                    task.status === "pending"
+                      ? "bg-yellow-600 text-neutral-50 font-semibold hover:bg-yellow-500"
+                      : task.status === "in_progress"
+                      ? "bg-sky-600 text-neutral-50 font-semibold hover:bg-sky-500"
+                      : "bg-green-700 text-neutral-50 font-semibold hover:bg-green-600"
+                  }`}
+                      >
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent className="rounded-2xl bg-neutral-800 text-neutral-50 border-neutral-800">
+                        {taskStatus
+                          .filter((task) => task.value !== "all")
+                          .map((task, index) => (
+                            <SelectItem
+                              key={index}
+                              value={task.value}
+                              className="rounded-2xl hover:cursor-pointer"
+                            >
+                              {task.label}
+                            </SelectItem>
+                          ))}
+                      </SelectContent>
+                    </Select>
+                    <Button
+                      className="hover:cursor-pointer bg-purple-800 hover:bg-purple-600 rounded-2xl"
+                      size="sm"
+                      onClick={() => handleEdit(task)}
+                    >
+                      <FontAwesomeIcon icon={faEdit} />
+                    </Button>
+                    <Button
+                      className="hover:cursor-pointer bg-purple-800 hover:bg-purple-600 rounded-2xl"
+                      size="sm"
+                      onClick={() => handleDelete(String(task.id))}
+                    >
+                      <FontAwesomeIcon icon={faTrash} />
+                    </Button>
+                  </CardFooter>
+                </Card>
+              </div>
+            ))}
+          </div>
         )}
       </div>
 
